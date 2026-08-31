@@ -1,5 +1,7 @@
 import './style.css'
-
+import ideastreamImg from './assets/ideastream.webp'
+import fmsImg from './assets/fms.webp'
+import hmsImg from './assets/hms.webp'
 
 
 
@@ -66,19 +68,19 @@ const projects = [
   {
     title: "Ideastream",
     description: "IdeaStream is a multi-database social media web application. It demonstrates advanced concepts in data modeling, polyglot persistence, and modern web application architecture by using a specialized database for each domain constraint.",
-    image: "/src/assets/ideastream.webp",
+    image: ideastreamImg,
     github: "https://github.com/saubanahmad/ideastream-adms"
   },
   {
     title: "Flight Management System",
     description: "A Data Structures and Algorithms (DSA) based flight management system developed in C# with Windows Forms and MySQL. The project simulates a real-world airline network where users can search flights, view routes, and create bookings. While administrators can add airports, create routes, schedule flights, and monitor airline operations.",
-    image: "/src/assets/fms.webp",
+    image: fmsImg,
     github: "https://github.com/saubanahmad/Flight-Booking-and-Ticket-Management-System"
   },
   {
     title: "Hospital Management System",
     description: "Hospital Management System built with C# WinForms and MySQL to manage doctors, patients, departments, appointments, schedules, and medical reports in a structured OOP-based desktop application.",
-    image: "/src/assets/hms.webp",
+    image: hmsImg,
     github: "https://github.com/saubanahmad/Hospital-Management-System"
   }
 ];

@@ -1,0 +1,935 @@
+:root {
+  /* Color Palette */
+  --bg-color: #0f0a1f;
+  /* Deep dark purple/black */
+  --text-main: #f8fafc;
+  --text-muted: #c4b5fd;
+  /* Soft purple */
+  --accent: #8b5cf6;
+  /* Vibrant purple */
+  --accent-hover: #7c3aed;
+  /* Slightly darker purple on hover */
+
+  /* Typography & Layout */
+  --font-main: 'Outfit', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-heading: 'Bebas Neue', sans-serif;
+  /* Tall & condensed */
+  --max-width: 1100px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-snap-type: y mandatory;
+}
+
+body {
+  font-family: var(--font-main);
+  line-height: 1.6;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  overflow-x: clip;
+
+  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-attachment: fixed;
+  /* Locks the grid to the screen */
+  background-position: top left;
+}
+
+a {
+  color: var(--text-main);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+ul {
+  list-style: none;
+}
+
+main,
+footer {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+nav {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(15, 10, 31, 0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 50px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  position: relative;
+  
+  /* Prevent text highlighting when dragging the pill! */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+nav a {
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: rgba(196, 181, 253, 0.4);
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+/* --- The Glossy iOS Pill --- */
+
+.nav-pill {
+  position: absolute;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  left: 0;
+  width: 0px;
+  z-index: 1;
+  border-radius: 50px;
+  pointer-events: none; /* Let clicks pass through to the links underneath! */
+
+  /* The Bubble Background Gradient */
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.3) 0%,
+      rgba(139, 92, 246, 0.5) 40%,
+      rgba(139, 92, 246, 0.1) 100%);
+
+  /* The 3D Glass Effects (This is where the magic happens) */
+  box-shadow:
+    inset 0px 2px 4px rgba(255, 255, 255, 0.491),
+    /* Bright top highlight reflection */
+    inset 0px -2px 6px rgba(0, 0, 0, 0.3),
+    /* Dark bottom inner volume shadow */
+    0px 4px 15px rgba(131, 79, 255, 0.6),
+    /* Outer purple glowing drop shadow */
+    0px 0px 0px 1px rgba(255, 255, 255, 0.2);
+  /* Thin physical glassy edge */
+
+  backdrop-filter: blur(12px) brightness(1.2);
+  -webkit-backdrop-filter: blur(12px) brightness(1.2);
+
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+    width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+
+nav a:hover,
+nav a.active {
+  color: var(--text-main);
+}
+
+/* --- Floating Nav Dock --- */
+header {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+}
+
+/* Custom Cursor*/
+body,
+a,
+button,
+.skill-icon {
+  cursor: none;
+}
+
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent);
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .cursor-dot {
+    display: none !important;
+  }
+}
+
+/* --- Interactive Glowing Grid --- */
+.interactive-grid {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  /* Behind everything else on the page */
+  pointer-events: none;
+  /* So it doesn't block your clicks */
+
+  /* Draw the exact same grid, but in vibrant purple */
+  background-image:
+    linear-gradient(rgba(139, 92, 246, 0.4) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, 0.4) 1px, transparent 1px);
+  background-size: 40px 40px;
+
+  /* THE MAGIC: A circular mask that tracks the CSS variables we set in JS! */
+  mask-image: radial-gradient(circle 300px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      black 0%,
+      transparent 100%);
+  -webkit-mask-image: radial-gradient(circle 300px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      black 0%,
+      transparent 100%);
+}
+
+
+/* --- Hero Section --- */
+#hero {
+  min-height: 100vh;
+  /* Fixed the bleeding about section issue! */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.hero-title-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero-dp {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  /* Purple glowing ring */
+  box-shadow: 0 0 5px rgba(139, 92, 246, 0.4);
+}
+
+#hero h1 {
+  font-family: var(--font-heading);
+  font-size: 6rem;
+  font-weight: 400;
+  letter-spacing: 2px;
+  line-height: 1;
+  margin-bottom: 0;
+  /* Margin handled by the row now */
+  background: linear-gradient(to right, var(--text-main), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#hero p {
+  font-family: var(--font-mono);
+  /* Gives the typing effect a terminal/code vibe! */
+  font-size: 1.1rem;
+  /* Slightly smaller because monospace fonts are wide */
+  color: var(--text-muted);
+  max-width: 600px;
+  min-height: 4rem;
+  /* Reserves space for 2 lines so the heading doesn't jump! */
+}
+
+/* --- Hero Typing Cursor --- */
+#hero-subtitle {
+  min-height: 4rem; /* Reserves space for 2 lines of text */
+}
+
+#hero-subtitle::after {
+  content: '|';
+  color: var(--accent);
+  /* Purple cursor! */
+  animation: blink 1s step-start infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* --- Sections --- */
+section {
+  padding: 5rem 0;
+  scroll-snap-align: start;
+  min-height: 100vh;
+}
+
+section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: var(--text-main);
+}
+
+/* --- Scroll Reveal Animations --- */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  /* Butter-smooth cubic-bezier easing, slowed down to 1.5s! */
+  transition: opacity 1.5s ease-out, transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform; /* Hardware Acceleration */
+}
+
+.reveal.visible {
+  opacity: 1;
+  filter: blur(0);
+  /* Snaps into sharp focus */
+  transform: translateY(0);
+  /* Slides up into its original place */
+}
+
+/* --- About Section --- */
+.about-container {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* --- About Section Actions --- */
+.about-action {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* The Printer Device */
+.print-btn {
+  position: relative;
+  width: 220px;
+  /* Widened to fit the text */
+  height: 95px;
+  /* Slightly taller */
+  background: linear-gradient(180deg, #3a3a4a, #22222e);
+  border: 2px solid #4a4a5e;
+  border-radius: 12px 12px 4px 4px;
+  /* Flatter bottom for the output slot */
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.5),
+    inset 0 4px 10px rgba(255, 255, 255, 0.1);
+  z-index: 2;
+}
+
+.print-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 30px rgba(139, 92, 246, 0.3);
+  border-color: rgba(139, 92, 246, 0.6);
+}
+
+.print-btn:active {
+  transform: scale(0.95);
+}
+
+/* Paper Feed Slot (Blank paper sitting on top of printer) */
+.print-btn::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  /* Widened to match new printer size */
+  height: 15px;
+  background: #e0e0e0;
+  border-radius: 4px 4px 0 0;
+  border: 1px solid #999;
+  z-index: -2;
+  /* Behind the printer */
+}
+
+/* The Printed Paper (Resume sliding out) */
+.print-btn::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 15%;
+  width: 70%;
+  height: 0px;
+  background-color: white;
+  background-image: repeating-linear-gradient(transparent,
+      transparent 6px,
+      #9ca3af 6px,
+      #9ca3af 8px);
+  z-index: -1;
+  transition: all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1);
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* The Printing Animation */
+.print-btn.is-printing::after {
+  bottom: -120px;
+  /* Slides OUT of the bottom */
+  height: 120px;
+}
+
+/* Glowing LED */
+.printer-led {
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  /* Green ready light */
+  border-radius: 50%;
+  margin-bottom: 8px;
+  box-shadow: 0 0 10px #10b981;
+}
+
+.print-btn.is-printing .printer-led {
+  background: #3b82f6;
+  /* Blue processing light */
+  box-shadow: 0 0 10px #3b82f6;
+  animation: blink 0.5s infinite;
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* Text */
+.btn-text {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  color: #a1a1aa;
+}
+
+.print-btn.is-printing {
+  background: rgba(139, 92, 246, 0.8);
+  color: white;
+  transform: translateY(0);
+}
+
+.about-content {
+  flex: 1;
+  /* Takes up the other 50% */
+}
+
+section h2 {
+  font-family: var(--font-heading);
+  font-size: 4rem;
+  margin-bottom: 3rem;
+  line-height: 1;
+  text-align: center;
+}
+
+
+
+.about-content h2 {
+  text-align: left;
+  margin-bottom: 1.5rem;
+}
+
+.about-content p {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+/* The Glowing Purple Highlight Words! */
+.highlight {
+  color: var(--text-main);
+  font-weight: 600;
+  text-shadow: 0 0 12px rgba(139, 92, 246, 0.8);
+  /* Neon glow */
+}
+
+/* --- Floating Keyframes --- */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+
+  /* Floats up 20px */
+  100% {
+    transform: translateY(0px);
+  }
+
+  /* Floats back down */
+}
+
+
+/* --- Skills --- */
+.marquee-container {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 3rem 0;
+
+  /* Stretches the marquee fully edge-to-edge */
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* The High-Performance Fade Edges */
+.marquee-container::before,
+.marquee-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 15vw;
+  /* How far the fade reaches inwards */
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  /* Lets you click right through it */
+}
+
+/* Fades from background color to transparent on the left */
+.marquee-container::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bg-color), transparent);
+}
+
+/* Fades from background color to transparent on the right */
+.marquee-container::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg-color), transparent);
+}
+
+.marquee-track {
+  display: flex;
+  gap: 4rem;
+  width: max-content;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+.scroll-left {
+  animation: scrollLeft 25s linear infinite;
+}
+
+.scroll-right {
+  animation: scrollRight 25s linear infinite;
+}
+
+@keyframes scrollLeft {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-25%);
+  }
+}
+
+@keyframes scrollRight {
+  0% {
+    transform: translateX(-25%);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+
+/* The Glass Pill */
+.skill-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+
+  /* The Glassmorphism Magic */
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 50px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+
+/* Hover Effect: It floats up and glows! */
+.skill-icon:hover {
+  transform: translateY(-5px) scale(1.05);
+  border-color: rgba(139, 92, 246, 0.8);
+  background: rgba(139, 92, 246, 0.2);
+}
+
+.skill-icon img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+/* The New Text Styling */
+.skill-name {
+  font-family: var(--font-main);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text-main);
+  white-space: nowrap;
+  /* Prevents text from wrapping to a second line */
+}
+
+.skill-icon:hover {
+  transform: translateY(-5px) scale(1.1);
+}
+
+
+@media (min-width: 901px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+/* --- Projects (Alternating Faded Layout) --- */
+#projects {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  position: relative;
+  /* Remove all padding so cards can take up 100vh naturally */
+}
+
+/* The Layout Block */
+.project-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6rem;
+  width: 100%;
+  min-height: 100vh;
+  /* Each project takes a full screen */
+  scroll-snap-align: start;
+}
+
+/* The magic alternating zig-zag! */
+.project-card:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+/* Info takes up 50% */
+.project-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.project-info h3 {
+  font-family: var(--font-main);
+  font-weight: 700;
+  font-size: 2.5rem; /* Reduced from 3.5rem */
+  margin-bottom: 1rem;
+  color: var(--text-main);
+  line-height: 1.1;
+}
+
+.project-info p {
+  color: var(--text-muted);
+  font-size: 1rem; /* Reduced from 1.25rem */
+  margin-bottom: 2.5rem;
+  max-width: 600px;
+}
+
+.project-link {
+  align-self: flex-start;
+  padding: 0.6rem 2rem; /* Reduced from 1rem 3rem for a sleeker button */
+  background: var(--accent);
+  color: white;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.project-link:hover {
+  background: white;
+  color: var(--accent);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+}
+
+/* Image takes up 50% */
+.project-image {
+  flex: 1;
+  width: 100%;
+  height: 300px;
+  /* Shorter, wider cinematic size */
+
+  /* THE MAGIC RECTANGULAR FADE */
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent),
+    linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent),
+    linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+  mask-composite: intersect;
+}
+
+.project-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  border-radius: 20px;
+  /* Just to ensure the base shape is smooth before mask */
+}
+
+.project-image:hover img {
+  transform: scale(1.05);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 900px) {
+
+  #hero h1 {
+    font-size: 2.5rem;
+  }
+
+  #hero-subtitle {
+    min-height: 5rem; /* Might need 3 lines on mobile */
+  }
+
+  nav {
+    gap: 0.25rem;
+    padding: 0.5rem;
+  }
+
+  nav a {
+    padding: 0.5rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .about-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  /* Hero Card Stack */
+  .hero-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .hero-text {
+    align-items: center;
+    text-align: center;
+  }
+  
+  .hero-title-row {
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .hero-card .social-links {
+    flex-direction: row !important;
+    margin-top: 2rem !important;
+    justify-content: center;
+  }
+  
+  .tilt-card {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .project-card,
+  .project-card:nth-child(even) {
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .project-info h3 {
+    font-size: 1.8rem;
+  }
+
+  .project-image {
+    height: 350px;
+  }
+
+  .project-link {
+    align-self: center;
+    /* Center button on mobile */
+  }
+}
+
+/* --- Contact Section --- */
+#contact {
+  text-align: center;
+  padding: 0;
+  min-height: auto;
+  margin-bottom: 5rem;
+  /* Just enough space so it doesn't cut off at the exact pixel */
+}
+
+.contact-card {
+  background: rgba(30, 20, 50, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 24px;
+  padding: 4rem;
+  max-width: 600px;
+  margin: 0 auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.contact-card p {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.contact-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.8rem 2rem;
+  background: transparent;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  border-radius: 50px;
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  width: fit-content;
+}
+
+.contact-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.contact-btn:hover {
+  background: rgba(139, 92, 246, 0.1);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+  transform: translateY(-3px);
+}
+
+.social-links {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.social-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: var(--accent);
+}
+
+/* --- Hero Card (About Me) --- */
+.hero-card {
+  background: #1e1136;
+  padding: 4rem;
+  border-radius: 24px;
+  border: 1px solid #4c2882;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+}
+
+/* Restyle the social links inside the hero card */
+.hero-card .social-links {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 0;
+}
+
+/* --- Social Icon Circles --- */
+.hero-card .social-links a.social-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  color: var(--text-main);
+}
+
+.hero-card .social-links a.social-circle:hover {
+  background-color: rgba(139, 92, 246, 0.2);
+  transform: translateY(-4px);
+}
+
+.hero-card .social-links img,
+.hero-card .social-links svg {
+  width: 26px;
+  height: 26px;
+}
+
+.hero-card .social-links img[alt="GitHub"] {
+  filter: invert(1);
+}
+
+/* The Generic 3D Tilt CSS */
+.tilt-card {
+  transition: transform 0.1s ease-out, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.tilt-card:hover {
+  box-shadow: 0 20px 50px -10px rgba(139, 92, 246, 0.4);
+  border-color: var(--accent);
+}
+

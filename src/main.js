@@ -325,7 +325,7 @@ if (printBtn) {
     setTimeout(() => {
       // Create an invisible link to force the download
       const link = document.createElement('a');
-      link.href = '/Sauban Ahmad - Resume.pdf';
+      link.href = '/Sauban_Ahmad_Resume.pdf';
       link.download = 'Sauban_Ahmad_Resume.pdf'; // Name of the downloaded file
       document.body.appendChild(link);
       link.click(); // Trigger the download
